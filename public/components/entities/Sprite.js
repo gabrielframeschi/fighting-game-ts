@@ -1,10 +1,11 @@
 import { canvas, context, GRAVITY } from "../../main.js";
 var Sprite = /** @class */ (function () {
     function Sprite(_a) {
-        var position = _a.position, velocity = _a.velocity;
+        var lastKey = _a.lastKey, position = _a.position, velocity = _a.velocity;
         this.height = 150;
         this.position = position;
         this.velocity = velocity;
+        this.lastKey = lastKey;
     }
     Sprite.prototype.draw = function () {
         context.fillStyle = "red";
@@ -12,6 +13,7 @@ var Sprite = /** @class */ (function () {
     };
     Sprite.prototype.update = function () {
         this.draw();
+        this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
         if (this.position.y + this.height + this.velocity.y >= canvas.height) {
             this.velocity.y = 0;

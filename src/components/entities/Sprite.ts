@@ -5,17 +5,20 @@ type Coordinates = { x: number; y: number };
 interface ISpriteProps {
   position: Coordinates;
   velocity: Coordinates;
+  lastKey: string;
 }
 
 export default class Sprite {
+  private height = 150;
+
   position: Coordinates;
   velocity: Coordinates;
-  height: number;
+  lastKey: string;
 
-  constructor({ position, velocity }: ISpriteProps) {
-    this.height = 150;
+  constructor({ lastKey, position, velocity }: ISpriteProps) {
     this.position = position;
     this.velocity = velocity;
+    this.lastKey = lastKey;
   }
 
   draw() {
@@ -25,6 +28,8 @@ export default class Sprite {
 
   update() {
     this.draw();
+
+    this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
     if (this.position.y + this.height + this.velocity.y >= canvas.height) {
