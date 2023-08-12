@@ -1,4 +1,5 @@
 import Sprite from "./components/entities/Sprite.js";
+import { decreaseHealthBar } from "./components/ui/healthBar.js";
 export var GRAVITY = 0.7;
 export var canvas = document.querySelector("canvas") || new HTMLCanvasElement();
 export var context = canvas.getContext("2d") || new CanvasRenderingContext2D();
@@ -140,9 +141,13 @@ var Game = /** @class */ (function () {
     Game.prototype.handleCollision = function () {
         if (this.detectCollision({ attacker: this.player, defender: this.enemy })) {
             this.player.isAttacking = false;
+            this.enemy.health -= 10;
+            decreaseHealthBar("player-2", this.enemy.health);
         }
         if (this.detectCollision({ attacker: this.enemy, defender: this.player })) {
             this.enemy.isAttacking = false;
+            this.player.health -= 10;
+            decreaseHealthBar("player-1", this.player.health);
         }
     };
     return Game;

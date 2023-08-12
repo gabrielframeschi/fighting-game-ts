@@ -3,12 +3,14 @@
 }
 
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 100vh;
   background-color: rgb(37, 37, 37);
 
   overflow-y: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .container {
@@ -25,16 +27,46 @@ body {
   align-items: center;
 }
 
-.player-1-health,
-.player-2-health {
+.player-1-health-bg,
+.player-2-health-bg {
   height: 30px;
   width: 100%;
-  background-color: yellow;
+  background-color: gray;
+}
+
+.player-1-health-container,
+.player-2-health-container {
+  height: 30px;
+  width: 100%;
+  position: relative;
+}
+
+.player-1-health-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.player-1-health,
+.player-2-health {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  position: absolute;
+}
+
+.player-1-health {
+  background-color: blue;
+}
+
+.player-2-health {
+  left: 0;
+  background-color: red;
 }
 
 .timer {
   height: 100px;
   width: 100px;
-  background-color: red;
+  background-color: orange;
   flex-shrink: 0;
 }

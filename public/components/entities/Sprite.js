@@ -5,6 +5,7 @@ var Sprite = /** @class */ (function () {
         this.height = 150;
         this.width = 50;
         this.isAttacking = false;
+        this.health = 100;
         this.position = position;
         this.velocity = velocity;
         this.lastKey = lastKey;

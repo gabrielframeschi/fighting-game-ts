@@ -21,6 +21,7 @@ export default class Sprite {
   height = 150;
   width = 50;
   isAttacking = false;
+  health = 100;
 
   hitBox: HitBox;
   position: Coordinates;
