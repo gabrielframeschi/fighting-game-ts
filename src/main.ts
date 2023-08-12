@@ -5,6 +5,12 @@ export const canvas =
   document.querySelector("canvas") || new HTMLCanvasElement();
 export const context =
   canvas.getContext("2d") || new CanvasRenderingContext2D();
+
+interface DettectColisionProps {
+  attacker: Sprite;
+  defender: Sprite;
+}
+
 const keys = {
   a: { pressed: false },
   d: { pressed: false },
@@ -23,13 +29,17 @@ class Game {
     this.player = new Sprite({
       position: { x: 100, y: 100 },
       velocity: { x: 0, y: 10 },
+      offset: { x: 0, y: 0 },
       lastKey: "",
+      color: "blue",
     });
 
     this.enemy = new Sprite({
       position: { x: 400, y: 100 },
       velocity: { x: 0, y: 0 },
+      offset: { x: -50, y: 0 },
       lastKey: "",
+      color: "red",
     });
 
     this.animate();
@@ -37,7 +47,7 @@ class Game {
   }
 
   private initCanvasSize(): void {
-    canvas.width = 1024;
+    canvas.width = 1280;
     canvas.height = 576;
   }
 
@@ -52,6 +62,8 @@ class Game {
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     this.controlMovement();
+
+    this.handleCollision();
   }
 
   private handleKeyInput() {
@@ -67,7 +79,10 @@ class Game {
           this.player.lastKey = "d";
           break;
         case "w":
-          if (this.player.velocity.y <= 5) this.player.velocity.y = -20;
+          if (this.player.velocity.y === 0) this.player.velocity.y = -20;
+          break;
+        case " ":
+          this.player.attack();
           break;
       }
 
@@ -82,7 +97,10 @@ class Game {
           this.enemy.lastKey = "ArrowRight";
           break;
         case "ArrowUp":
-          if (this.enemy.velocity.y <= 5) this.enemy.velocity.y = -20;
+          if (this.enemy.velocity.y === 0) this.enemy.velocity.y = -20;
+          break;
+        case "Enter":
+          this.enemy.attack();
           break;
       }
     });
@@ -128,6 +146,38 @@ class Game {
 
     if (keys.ArrowRight.pressed && this.enemy.lastKey === "ArrowRight")
       this.enemy.velocity.x = 5;
+  }
+
+  private detectCollision({ attacker, defender }: DettectColisionProps) {
+    if (!attacker.isAttacking) return false;
+
+    const collisionLeft = attacker.hitBox.position.x;
+    const collisionRight = attacker.hitBox.position.x + attacker.hitBox.width;
+    const collisionTop = attacker.hitBox.position.y;
+    const collisionBottom = attacker.hitBox.position.y + attacker.hitBox.height;
+
+    const defenderLeft = defender.position.x;
+    const defenderRight = defender.position.x + defender.width;
+    const defenderTop = defender.position.y;
+    const defenderBottom = defender.position.y + defender.height;
+
+    const isColliding =
+      collisionLeft < defenderRight &&
+      collisionRight > defenderLeft &&
+      collisionTop < defenderBottom &&
+      collisionBottom > defenderTop;
+
+    return isColliding;
+  }
+
+  private handleCollision() {
+    if (this.detectCollision({ attacker: this.player, defender: this.enemy })) {
+      this.player.isAttacking = false;
+    }
+
+    if (this.detectCollision({ attacker: this.enemy, defender: this.player })) {
+      this.enemy.isAttacking = false;
+    }
   }
 }
 

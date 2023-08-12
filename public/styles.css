@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(37, 37, 37);
+
+  overflow-y: hidden;
+}
+
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+.top-bar-container {
+  width: 100%;
+  position: absolute;
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+}
+
+.player-1-health,
+.player-2-health {
+  height: 30px;
+  width: 100%;
+  background-color: yellow;
+}
+
+.timer {
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  flex-shrink: 0;
+}
