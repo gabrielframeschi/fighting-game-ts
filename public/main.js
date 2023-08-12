@@ -1,5 +1,7 @@
 import Sprite from "./components/entities/Sprite.js";
 import { decreaseHealthBar } from "./components/ui/healthBar.js";
+import { decreaseTimer, timer, timerId } from "./components/ui/timer.js";
+import { updateMatchResultLabel } from "./components/ui/matchResultLabel.js";
 export var GRAVITY = 0.7;
 export var canvas = document.querySelector("canvas") || new HTMLCanvasElement();
 export var context = canvas.getContext("2d") || new CanvasRenderingContext2D();
@@ -29,6 +31,7 @@ var Game = /** @class */ (function () {
         });
         this.animate();
         this.handleKeyInput();
+        decreaseTimer();
     }
     Game.prototype.initCanvasSize = function () {
         canvas.width = 1280;
@@ -39,6 +42,15 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.animate = function () {
         var _this = this;
+        var isMatchFinished = this.handleVictory();
+        if (isMatchFinished) {
+            clearInterval(timerId);
+            return;
+        }
+        if (timer === 0) {
+            this.handleTimerVictory();
+            return;
+        }
         window.requestAnimationFrame(function () { return _this.animate(); });
         context.fillStyle = "black";
         context.fillRect(0, 0, canvas.width, canvas.height);
@@ -149,6 +161,29 @@ var Game = /** @class */ (function () {
             this.player.health -= 10;
             decreaseHealthBar("player-1", this.player.health);
         }
+    };
+    Game.prototype.handleVictory = function () {
+        if (this.player.health === 0 && this.enemy.health === 0) {
+            updateMatchResultLabel("Tie!");
+            return true;
+        }
+        if (this.enemy.health === 0) {
+            updateMatchResultLabel("Player 1 Wins!");
+            return true;
+        }
+        if (this.player.health === 0) {
+            updateMatchResultLabel("Player 2 Wins!");
+            return true;
+        }
+        return false;
+    };
+    Game.prototype.handleTimerVictory = function () {
+        if (this.player.health === this.player.health)
+            updateMatchResultLabel("Tie!");
+        if (this.player.health > this.enemy.health)
+            updateMatchResultLabel("Player 1 Wins!");
+        if (this.player.health < this.enemy.health)
+            updateMatchResultLabel("Player 2 Wins!");
     };
     return Game;
 }());

@@ -1,5 +1,7 @@
 import Sprite from "./components/entities/Sprite.js";
 import { decreaseHealthBar } from "./components/ui/healthBar.js";
+import { decreaseTimer, timer, timerId } from "./components/ui/timer.js";
+import { updateMatchResultLabel } from "./components/ui/matchResultLabel.js";
 
 export const GRAVITY = 0.7;
 export const canvas =
@@ -45,6 +47,8 @@ class Game {
 
     this.animate();
     this.handleKeyInput();
+
+    decreaseTimer();
   }
 
   private initCanvasSize(): void {
@@ -57,6 +61,17 @@ class Game {
   }
 
   private animate() {
+    const isMatchFinished = this.handleVictory();
+    if (isMatchFinished) {
+      clearInterval(timerId);
+      return;
+    }
+
+    if (timer === 0) {
+      this.handleTimerVictory();
+      return;
+    }
+
     window.requestAnimationFrame(() => this.animate());
 
     context.fillStyle = "black";
@@ -185,6 +200,36 @@ class Game {
       this.player.health -= 10;
       decreaseHealthBar("player-1", this.player.health);
     }
+  }
+
+  private handleVictory(): boolean {
+    if (this.player.health === 0 && this.enemy.health === 0) {
+      updateMatchResultLabel("Tie!");
+      return true;
+    }
+
+    if (this.enemy.health === 0) {
+      updateMatchResultLabel("Player 1 Wins!");
+      return true;
+    }
+
+    if (this.player.health === 0) {
+      updateMatchResultLabel("Player 2 Wins!");
+      return true;
+    }
+
+    return false;
+  }
+
+  private handleTimerVictory() {
+    if (this.player.health === this.player.health)
+      updateMatchResultLabel("Tie!");
+
+    if (this.player.health > this.enemy.health)
+      updateMatchResultLabel("Player 1 Wins!");
+
+    if (this.player.health < this.enemy.health)
+      updateMatchResultLabel("Player 2 Wins!");
   }
 }
 

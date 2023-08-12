@@ -69,4 +69,25 @@ body {
   width: 100px;
   background-color: orange;
   flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 3rem;
+}
+
+.match-result-label {
+  display: none;
+  color: white;
+  font-size: 6rem;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  align-items: center;
+  justify-content: center;
 }
