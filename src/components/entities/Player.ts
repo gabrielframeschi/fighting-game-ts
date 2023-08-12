@@ -1,7 +1,15 @@
-import { canvas, context, GRAVITY } from "../../main.js";
+import { canvas, GRAVITY } from "../../main.js";
 import Sprite, { ISpriteProps } from "./Sprite.js";
 
 type Coordinates = { x: number; y: number };
+
+type Sprites = {
+  [key: string]: {
+    imageSrc: string;
+    framesMax: number;
+    image: HTMLImageElement;
+  };
+};
 
 type HitBox = {
   position: Coordinates;
@@ -16,6 +24,7 @@ interface IPlayerProps extends ISpriteProps {
   lastKey: string;
   color: string;
   offset: Coordinates;
+  sprites: Sprites;
 }
 
 export default class Player extends Sprite {
@@ -28,6 +37,7 @@ export default class Player extends Sprite {
   velocity: Coordinates;
   lastKey: string;
   color: string;
+  sprites: Sprites;
 
   constructor({
     color,
@@ -41,6 +51,7 @@ export default class Player extends Sprite {
     imageSrc,
     scale = 1,
     offset = { x: 0, y: 0 },
+    sprites,
   }: IPlayerProps) {
     super({
       imageSrc,
@@ -56,6 +67,7 @@ export default class Player extends Sprite {
     this.velocity = velocity;
     this.lastKey = lastKey;
     this.color = color;
+    this.sprites = sprites;
 
     this.hitBox = {
       position: {
@@ -66,6 +78,11 @@ export default class Player extends Sprite {
       height: 50,
       width: 100,
     };
+
+    for (let sprite in this.sprites) {
+      sprites[sprite].image = new Image();
+      sprites[sprite].image.src = sprites[sprite].imageSrc;
+    }
   }
 
   update() {

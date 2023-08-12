@@ -53,6 +53,18 @@ class Game {
       imageSrc: "./assets/samuraiMack/Idle.png",
       framesQuant: 8,
       scale: 2.5,
+      sprites: {
+        idle: {
+          framesMax: 8,
+          imageSrc: "./assets/samuraiMack/Idle.png",
+          image: new Image(),
+        },
+        run: {
+          framesMax: 8,
+          imageSrc: "./assets/samuraiMack/Run.png",
+          image: new Image(),
+        },
+      },
     });
 
     this.player2 = new Player({
@@ -62,6 +74,13 @@ class Game {
       lastKey: "",
       color: "red",
       imageSrc: "./assets/samuraiMack/Idle.png",
+      sprites: {
+        idle: {
+          framesMax: 8,
+          imageSrc: "./assets/samuraiMack/Idle.png",
+          image: new Image(),
+        },
+      },
     });
 
     this.animate();
@@ -171,13 +190,19 @@ class Game {
     // this.player2.update();
 
     this.player1.velocity.x = 0;
+    this.player1.image = this.player1.sprites.idle.image;
+
     this.player2.velocity.x = 0;
 
-    if (keys.a.pressed && this.player1.lastKey === "a")
+    if (keys.a.pressed && this.player1.lastKey === "a") {
       this.player1.velocity.x = -5;
+      this.player1.image = this.player1.sprites.run.image;
+    }
 
-    if (keys.d.pressed && this.player1.lastKey === "d")
+    if (keys.d.pressed && this.player1.lastKey === "d") {
       this.player1.velocity.x = 5;
+      this.player1.image = this.player1.sprites.run.image;
+    }
 
     if (keys.ArrowLeft.pressed && this.player2.lastKey === "ArrowLeft")
       this.player2.velocity.x = -5;
