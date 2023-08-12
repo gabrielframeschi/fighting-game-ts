@@ -20,6 +20,12 @@ var Game = /** @class */ (function () {
             position: { x: 0, y: 0 },
             imageSrc: "./assets/background.png",
         });
+        this.shop = new Sprite({
+            position: { x: 630, y: 127 },
+            imageSrc: "./assets/shop.png",
+            scale: 2.75,
+            framesQuant: 6,
+        });
         this.player1 = new Player({
             position: { x: 100, y: 100 },
             velocity: { x: 0, y: 10 },
@@ -61,6 +67,7 @@ var Game = /** @class */ (function () {
         context.fillStyle = "black";
         context.fillRect(0, 0, canvas.width, canvas.height);
         this.backgrond.update();
+        this.shop.update();
         this.controlMovement();
         this.handleCollision();
     };

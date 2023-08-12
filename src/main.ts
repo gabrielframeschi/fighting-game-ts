@@ -26,6 +26,7 @@ class Game {
   private player1: Player;
   private player2: Player;
   private backgrond: Sprite;
+  private shop: Sprite;
 
   constructor() {
     this.initCanvasSize();
@@ -34,6 +35,13 @@ class Game {
     this.backgrond = new Sprite({
       position: { x: 0, y: 0 },
       imageSrc: "./assets/background.png",
+    });
+
+    this.shop = new Sprite({
+      position: { x: 630, y: 127 },
+      imageSrc: "./assets/shop.png",
+      scale: 2.75,
+      framesQuant: 6,
     });
 
     this.player1 = new Player({
@@ -60,7 +68,8 @@ class Game {
 
   private initCanvasSize(): void {
     canvas.width = 1280;
-    canvas.height = 576;56
+    canvas.height = 576;
+    56;
   }
 
   private fillBackground() {
@@ -85,6 +94,7 @@ class Game {
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     this.backgrond.update();
+    this.shop.update();
     this.controlMovement();
 
     this.handleCollision();
