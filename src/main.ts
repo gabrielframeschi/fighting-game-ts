@@ -45,19 +45,23 @@ class Game {
     });
 
     this.player1 = new Player({
-      position: { x: 100, y: 100 },
+      position: { x: 200, y: 100 },
       velocity: { x: 0, y: 10 },
-      offset: { x: 0, y: 0 },
+      offset: { x: 215, y: 155 },
       lastKey: "",
       color: "blue",
+      imageSrc: "./assets/samuraiMack/Idle.png",
+      framesQuant: 8,
+      scale: 2.5,
     });
 
     this.player2 = new Player({
-      position: { x: 400, y: 100 },
+      position: { x: canvas.width - 200, y: 100 },
       velocity: { x: 0, y: 0 },
       offset: { x: -50, y: 0 },
       lastKey: "",
       color: "red",
+      imageSrc: "./assets/samuraiMack/Idle.png",
     });
 
     this.animate();
@@ -164,7 +168,7 @@ class Game {
 
   private controlMovement() {
     this.player1.update();
-    this.player2.update();
+    // this.player2.update();
 
     this.player1.velocity.x = 0;
     this.player2.velocity.x = 0;

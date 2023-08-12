@@ -2,7 +2,7 @@ import { context } from "../../main.js";
 
 type Coordinates = { x: number; y: number };
 
-interface ISpriteProps {
+export interface ISpriteProps {
   position: Coordinates;
   imageSrc: string;
   scale?: number;
@@ -10,6 +10,7 @@ interface ISpriteProps {
   currentFrame?: number;
   framesElapsed?: number;
   framesHold?: number;
+  offset?: Coordinates;
 }
 
 export default class Sprite {
@@ -23,6 +24,7 @@ export default class Sprite {
   currentFrame: number;
   framesElapsed: number;
   framesHold: number;
+  offset: Coordinates;
 
   constructor({
     currentFrame = 0,
@@ -32,6 +34,7 @@ export default class Sprite {
     imageSrc,
     position,
     scale = 1,
+    offset = { x: 0, y: 0 },
   }: ISpriteProps) {
     this.position = position;
 
@@ -42,6 +45,7 @@ export default class Sprite {
     this.currentFrame = currentFrame;
     this.framesElapsed = framesElapsed;
     this.framesHold = framesHold;
+    this.offset = offset;
   }
 
   draw() {
@@ -51,8 +55,8 @@ export default class Sprite {
       0,
       this.image.width / this.framesQuant,
       this.image.height,
-      this.position.x,
-      this.position.y,
+      this.position.x - this.offset.x,
+      this.position.y - this.offset.y,
       (this.image.width / this.framesQuant) * this.scale,
       this.image.height * this.scale
     );
@@ -60,6 +64,10 @@ export default class Sprite {
 
   update() {
     this.draw();
+    this.animateFrames();
+  }
+
+  animateFrames() {
     this.framesElapsed++;
 
     if (this.framesElapsed % this.framesHold != 0) return;
