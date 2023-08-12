@@ -1,4 +1,4 @@
-export var timer = 11;
+export var timer = 61;
 export var timerId;
 export function decreaseTimer() {
     if (timer <= 0)
