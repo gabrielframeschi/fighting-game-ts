@@ -22,7 +22,6 @@ interface IPlayerProps extends ISpriteProps {
   position: Coordinates;
   velocity: Coordinates;
   lastKey: string;
-  color: string;
   offset: Coordinates;
   sprites: Sprites;
 }
@@ -36,11 +35,9 @@ export default class Player extends Sprite {
   hitBox: HitBox;
   velocity: Coordinates;
   lastKey: string;
-  color: string;
   sprites: Sprites;
 
   constructor({
-    color,
     lastKey,
     position,
     velocity,
@@ -66,7 +63,6 @@ export default class Player extends Sprite {
 
     this.velocity = velocity;
     this.lastKey = lastKey;
-    this.color = color;
     this.sprites = sprites;
 
     this.hitBox = {

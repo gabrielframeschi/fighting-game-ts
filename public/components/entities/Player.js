@@ -18,7 +18,7 @@ import Sprite from "./Sprite.js";
 var Player = /** @class */ (function (_super) {
     __extends(Player, _super);
     function Player(_a) {
-        var color = _a.color, lastKey = _a.lastKey, position = _a.position, velocity = _a.velocity, _b = _a.currentFrame, currentFrame = _b === void 0 ? 0 : _b, _c = _a.framesElapsed, framesElapsed = _c === void 0 ? 0 : _c, _d = _a.framesHold, framesHold = _d === void 0 ? 5 : _d, _e = _a.framesQuant, framesQuant = _e === void 0 ? 1 : _e, imageSrc = _a.imageSrc, _f = _a.scale, scale = _f === void 0 ? 1 : _f, _g = _a.offset, offset = _g === void 0 ? { x: 0, y: 0 } : _g, sprites = _a.sprites;
+        var lastKey = _a.lastKey, position = _a.position, velocity = _a.velocity, _b = _a.currentFrame, currentFrame = _b === void 0 ? 0 : _b, _c = _a.framesElapsed, framesElapsed = _c === void 0 ? 0 : _c, _d = _a.framesHold, framesHold = _d === void 0 ? 5 : _d, _e = _a.framesQuant, framesQuant = _e === void 0 ? 1 : _e, imageSrc = _a.imageSrc, _f = _a.scale, scale = _f === void 0 ? 1 : _f, _g = _a.offset, offset = _g === void 0 ? { x: 0, y: 0 } : _g, sprites = _a.sprites;
         var _this = _super.call(this, {
             imageSrc: imageSrc,
             position: position,
@@ -35,7 +35,6 @@ var Player = /** @class */ (function (_super) {
         _this.health = 100;
         _this.velocity = velocity;
         _this.lastKey = lastKey;
-        _this.color = color;
         _this.sprites = sprites;
         _this.hitBox = {
             position: {

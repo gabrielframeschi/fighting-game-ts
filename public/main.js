@@ -31,7 +31,6 @@ var Game = /** @class */ (function () {
             velocity: { x: 0, y: 10 },
             offset: { x: 215, y: 155 },
             lastKey: "",
-            color: "blue",
             imageSrc: "./assets/samuraiMack/Idle.png",
             framesQuant: 8,
             scale: 2.5,
@@ -44,18 +43,19 @@ var Game = /** @class */ (function () {
             },
         });
         this.player2 = new Player({
-            position: { x: canvas.width - 200, y: 100 },
+            position: { x: canvas.width - 220, y: 100 },
             velocity: { x: 0, y: 0 },
-            offset: { x: -50, y: 0 },
+            offset: { x: 215, y: 170 },
             lastKey: "",
-            color: "red",
-            imageSrc: "./assets/samuraiMack/Idle.png",
+            imageSrc: "./assets/kenji/Idle.png",
+            framesQuant: 4,
+            scale: 2.5,
             sprites: {
-                idle: {
-                    framesMax: 8,
-                    imageSrc: "./assets/samuraiMack/Idle.png",
-                    image: new Image(),
-                },
+                idle: this.createSprite(4, "./assets/kenji/Idle.png"),
+                run: this.createSprite(8, "./assets/kenji/Run.png"),
+                jump: this.createSprite(2, "./assets/kenji/Jump.png"),
+                fall: this.createSprite(2, "./assets/kenji/Fall.png"),
+                attack1: this.createSprite(4, "./assets/kenji/Attack1.png"),
             },
         });
         this.animate();
@@ -152,7 +152,7 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.controlMovement = function () {
         this.player1.update();
-        // this.player2.update();
+        this.player2.update();
         this.player1.velocity.x = 0;
         this.player2.velocity.x = 0;
         if (keys.a.pressed && this.player1.lastKey === "a") {
@@ -171,10 +171,22 @@ var Game = /** @class */ (function () {
         if (this.player1.velocity.y > 0) {
             this.player1.switchSprite("fall");
         }
-        if (keys.ArrowLeft.pressed && this.player2.lastKey === "ArrowLeft")
+        if (keys.ArrowLeft.pressed && this.player2.lastKey === "ArrowLeft") {
             this.player2.velocity.x = -5;
-        if (keys.ArrowRight.pressed && this.player2.lastKey === "ArrowRight")
+            this.player2.switchSprite("run");
+        }
+        if (keys.ArrowRight.pressed && this.player2.lastKey === "ArrowRight") {
             this.player2.velocity.x = 5;
+            this.player2.switchSprite("run");
+        }
+        if (!keys.ArrowLeft.pressed && !keys.ArrowRight.pressed)
+            this.player2.switchSprite("idle");
+        if (this.player2.velocity.y < 0) {
+            this.player2.switchSprite("jump");
+        }
+        if (this.player2.velocity.y > 0) {
+            this.player2.switchSprite("fall");
+        }
     };
     Game.prototype.detectCollision = function (_a) {
         var attacker = _a.attacker, defender = _a.defender;
