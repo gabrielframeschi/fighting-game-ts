@@ -107,7 +107,18 @@ export default class Player extends Sprite {
     this.isAttacking = true;
   }
 
+  takeHit() {
+    this.switchSprite("takeHit");
+    this.health -= 10;
+  }
+
   switchSprite(spriteKey: string) {
+    if (
+      this.image === this.sprites.takeHit.image &&
+      this.currentFrame < this.sprites.takeHit.framesMax - 1
+    )
+      return;
+
     if (
       this.image === this.sprites.attack1.image &&
       this.currentFrame < this.sprites.attack1.framesMax - 1
@@ -151,6 +162,14 @@ export default class Player extends Sprite {
         if (this.image !== this.sprites.attack1.image) {
           this.image = this.sprites.attack1.image;
           this.framesQuant = this.sprites.attack1.framesMax;
+          this.currentFrame = 0;
+        }
+        break;
+
+      case "takeHit":
+        if (this.image !== this.sprites.takeHit.image) {
+          this.image = this.sprites.takeHit.image;
+          this.framesQuant = this.sprites.takeHit.framesMax;
           this.currentFrame = 0;
         }
         break;

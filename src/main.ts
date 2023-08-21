@@ -59,12 +59,13 @@ class Game {
         jump: this.createSprite(2, "./assets/samuraiMack/Jump.png"),
         fall: this.createSprite(2, "./assets/samuraiMack/Fall.png"),
         attack1: this.createSprite(6, "./assets/samuraiMack/Attack1.png"),
+        takeHit: this.createSprite(4, "./assets/samuraiMack/Take Hit.png"),
       },
       hitBox: {
         position: { x: 0, y: 0 },
         offset: { x: 100, y: 50 },
         height: 50,
-        width: 157,
+        width: 150,
       },
     });
 
@@ -82,12 +83,13 @@ class Game {
         jump: this.createSprite(2, "./assets/kenji/Jump.png"),
         fall: this.createSprite(2, "./assets/kenji/Fall.png"),
         attack1: this.createSprite(4, "./assets/kenji/Attack1.png"),
+        takeHit: this.createSprite(4, "./assets/kenji/Take Hit.png"),
       },
       hitBox: {
         position: { x: 0, y: 0 },
-        offset: { x: -173, y: 50 },
+        offset: { x: -180, y: 50 },
         height: 50,
-        width: 157,
+        width: 160,
       },
     });
 
@@ -279,7 +281,7 @@ class Game {
     ) {
       this.player1.isAttacking = false;
 
-      this.player2.health -= 10;
+      this.player2.takeHit();
       decreaseHealthBar("player-2", this.player2.health);
     }
 
@@ -295,7 +297,7 @@ class Game {
     ) {
       this.player2.isAttacking = false;
 
-      this.player1.health -= 10;
+      this.player1.takeHit();
       decreaseHealthBar("player-1", this.player1.health);
     }
 

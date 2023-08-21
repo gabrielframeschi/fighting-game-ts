@@ -68,7 +68,14 @@ var Player = /** @class */ (function (_super) {
         this.switchSprite("attack1");
         this.isAttacking = true;
     };
+    Player.prototype.takeHit = function () {
+        this.switchSprite("takeHit");
+        this.health -= 10;
+    };
     Player.prototype.switchSprite = function (spriteKey) {
+        if (this.image === this.sprites.takeHit.image &&
+            this.currentFrame < this.sprites.takeHit.framesMax - 1)
+            return;
         if (this.image === this.sprites.attack1.image &&
             this.currentFrame < this.sprites.attack1.framesMax - 1)
             return;
@@ -105,6 +112,13 @@ var Player = /** @class */ (function (_super) {
                 if (this.image !== this.sprites.attack1.image) {
                     this.image = this.sprites.attack1.image;
                     this.framesQuant = this.sprites.attack1.framesMax;
+                    this.currentFrame = 0;
+                }
+                break;
+            case "takeHit":
+                if (this.image !== this.sprites.takeHit.image) {
+                    this.image = this.sprites.takeHit.image;
+                    this.framesQuant = this.sprites.takeHit.framesMax;
                     this.currentFrame = 0;
                 }
                 break;
