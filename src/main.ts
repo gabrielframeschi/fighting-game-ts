@@ -129,6 +129,11 @@ class Game {
 
     this.backgrond.update();
     this.shop.update();
+
+    // adds white overlay between background and players
+    context.fillStyle = "rgba(255, 255, 255, 0.15)";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
     this.controlMovement();
 
     this.handleCollision();
