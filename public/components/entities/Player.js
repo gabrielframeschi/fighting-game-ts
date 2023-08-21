@@ -33,6 +33,7 @@ var Player = /** @class */ (function (_super) {
         _this.width = 50;
         _this.isAttacking = false;
         _this.health = 100;
+        _this.dead = false;
         _this.velocity = velocity;
         _this.lastKey = lastKey;
         _this.sprites = sprites;
@@ -52,7 +53,8 @@ var Player = /** @class */ (function (_super) {
     }
     Player.prototype.update = function () {
         this.draw();
-        this.animateFrames();
+        if (!this.dead)
+            this.animateFrames();
         this.hitBox.position.x = this.position.x + this.hitBox.offset.x;
         this.hitBox.position.y = this.position.y + this.hitBox.offset.y;
         this.position.x += this.velocity.x;
@@ -65,14 +67,23 @@ var Player = /** @class */ (function (_super) {
         this.velocity.y += GRAVITY;
     };
     Player.prototype.attack = function () {
-        this.switchSprite("attack1");
         this.isAttacking = true;
+        this.switchSprite("attack1");
     };
     Player.prototype.takeHit = function () {
-        this.switchSprite("takeHit");
         this.health -= 10;
+        if (this.health <= 0) {
+            this.switchSprite("death");
+            return;
+        }
+        this.switchSprite("takeHit");
     };
     Player.prototype.switchSprite = function (spriteKey) {
+        if (this.image === this.sprites.death.image) {
+            if (this.currentFrame === this.sprites.death.framesMax - 1)
+                this.dead = true;
+            return;
+        }
         if (this.image === this.sprites.takeHit.image &&
             this.currentFrame < this.sprites.takeHit.framesMax - 1)
             return;
@@ -119,6 +130,13 @@ var Player = /** @class */ (function (_super) {
                 if (this.image !== this.sprites.takeHit.image) {
                     this.image = this.sprites.takeHit.image;
                     this.framesQuant = this.sprites.takeHit.framesMax;
+                    this.currentFrame = 0;
+                }
+                break;
+            case "death":
+                if (this.image !== this.sprites.death.image) {
+                    this.image = this.sprites.death.image;
+                    this.framesQuant = this.sprites.death.framesMax;
                     this.currentFrame = 0;
                 }
                 break;

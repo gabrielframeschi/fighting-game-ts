@@ -41,6 +41,7 @@ var Game = /** @class */ (function () {
                 fall: this.createSprite(2, "./assets/samuraiMack/Fall.png"),
                 attack1: this.createSprite(6, "./assets/samuraiMack/Attack1.png"),
                 takeHit: this.createSprite(4, "./assets/samuraiMack/Take Hit.png"),
+                death: this.createSprite(6, "./assets/samuraiMack/Death.png"),
             },
             hitBox: {
                 position: { x: 0, y: 0 },
@@ -64,6 +65,7 @@ var Game = /** @class */ (function () {
                 fall: this.createSprite(2, "./assets/kenji/Fall.png"),
                 attack1: this.createSprite(4, "./assets/kenji/Attack1.png"),
                 takeHit: this.createSprite(4, "./assets/kenji/Take Hit.png"),
+                death: this.createSprite(7, "./assets/kenji/Death.png"),
             },
             hitBox: {
                 position: { x: 0, y: 0 },
@@ -89,7 +91,6 @@ var Game = /** @class */ (function () {
         var isMatchFinished = this.handleVictory();
         if (isMatchFinished) {
             clearInterval(timerId);
-            return;
         }
         if (timer === 0) {
             this.handleTimerVictory();
@@ -106,41 +107,45 @@ var Game = /** @class */ (function () {
     Game.prototype.handleKeyInput = function () {
         var _this = this;
         window.addEventListener("keydown", function (event) {
-            // player1 1 control
-            switch (event.key) {
-                case "a":
-                    keys.a.pressed = true;
-                    _this.player1.lastKey = "a";
-                    break;
-                case "d":
-                    keys.d.pressed = true;
-                    _this.player1.lastKey = "d";
-                    break;
-                case "w":
-                    if (_this.player1.velocity.y === 0)
-                        _this.player1.velocity.y = -20;
-                    break;
-                case " ":
-                    _this.player1.attack();
-                    break;
+            if (!_this.player1.dead &&
+                _this.player1.image !== _this.player1.sprites.death.image) {
+                switch (event.key) {
+                    case "a":
+                        keys.a.pressed = true;
+                        _this.player1.lastKey = "a";
+                        break;
+                    case "d":
+                        keys.d.pressed = true;
+                        _this.player1.lastKey = "d";
+                        break;
+                    case "w":
+                        if (_this.player1.velocity.y === 0)
+                            _this.player1.velocity.y = -20;
+                        break;
+                    case " ":
+                        _this.player1.attack();
+                        break;
+                }
             }
-            // player1 2 (player2) control
-            switch (event.key) {
-                case "ArrowLeft":
-                    keys.ArrowLeft.pressed = true;
-                    _this.player2.lastKey = "ArrowLeft";
-                    break;
-                case "ArrowRight":
-                    keys.ArrowRight.pressed = true;
-                    _this.player2.lastKey = "ArrowRight";
-                    break;
-                case "ArrowUp":
-                    if (_this.player2.velocity.y === 0)
-                        _this.player2.velocity.y = -20;
-                    break;
-                case "Enter":
-                    _this.player2.attack();
-                    break;
+            if (!_this.player2.dead &&
+                _this.player2.image !== _this.player2.sprites.death.image) {
+                switch (event.key) {
+                    case "ArrowLeft":
+                        keys.ArrowLeft.pressed = true;
+                        _this.player2.lastKey = "ArrowLeft";
+                        break;
+                    case "ArrowRight":
+                        keys.ArrowRight.pressed = true;
+                        _this.player2.lastKey = "ArrowRight";
+                        break;
+                    case "ArrowUp":
+                        if (_this.player2.velocity.y === 0)
+                            _this.player2.velocity.y = -20;
+                        break;
+                    case "Enter":
+                        _this.player2.attack();
+                        break;
+                }
             }
         });
         window.addEventListener("keyup", function (event) {

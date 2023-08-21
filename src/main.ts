@@ -60,6 +60,7 @@ class Game {
         fall: this.createSprite(2, "./assets/samuraiMack/Fall.png"),
         attack1: this.createSprite(6, "./assets/samuraiMack/Attack1.png"),
         takeHit: this.createSprite(4, "./assets/samuraiMack/Take Hit.png"),
+        death: this.createSprite(6, "./assets/samuraiMack/Death.png"),
       },
       hitBox: {
         position: { x: 0, y: 0 },
@@ -84,6 +85,7 @@ class Game {
         fall: this.createSprite(2, "./assets/kenji/Fall.png"),
         attack1: this.createSprite(4, "./assets/kenji/Attack1.png"),
         takeHit: this.createSprite(4, "./assets/kenji/Take Hit.png"),
+        death: this.createSprite(7, "./assets/kenji/Death.png"),
       },
       hitBox: {
         position: { x: 0, y: 0 },
@@ -113,7 +115,6 @@ class Game {
     const isMatchFinished = this.handleVictory();
     if (isMatchFinished) {
       clearInterval(timerId);
-      return;
     }
 
     if (timer === 0) {
@@ -135,40 +136,48 @@ class Game {
 
   private handleKeyInput() {
     window.addEventListener("keydown", (event) => {
-      // player1 1 control
-      switch (event.key) {
-        case "a":
-          keys.a.pressed = true;
-          this.player1.lastKey = "a";
-          break;
-        case "d":
-          keys.d.pressed = true;
-          this.player1.lastKey = "d";
-          break;
-        case "w":
-          if (this.player1.velocity.y === 0) this.player1.velocity.y = -20;
-          break;
-        case " ":
-          this.player1.attack();
-          break;
+      if (
+        !this.player1.dead &&
+        this.player1.image !== this.player1.sprites.death.image
+      ) {
+        switch (event.key) {
+          case "a":
+            keys.a.pressed = true;
+            this.player1.lastKey = "a";
+            break;
+          case "d":
+            keys.d.pressed = true;
+            this.player1.lastKey = "d";
+            break;
+          case "w":
+            if (this.player1.velocity.y === 0) this.player1.velocity.y = -20;
+            break;
+          case " ":
+            this.player1.attack();
+            break;
+        }
       }
 
-      // player1 2 (player2) control
-      switch (event.key) {
-        case "ArrowLeft":
-          keys.ArrowLeft.pressed = true;
-          this.player2.lastKey = "ArrowLeft";
-          break;
-        case "ArrowRight":
-          keys.ArrowRight.pressed = true;
-          this.player2.lastKey = "ArrowRight";
-          break;
-        case "ArrowUp":
-          if (this.player2.velocity.y === 0) this.player2.velocity.y = -20;
-          break;
-        case "Enter":
-          this.player2.attack();
-          break;
+      if (
+        !this.player2.dead &&
+        this.player2.image !== this.player2.sprites.death.image
+      ) {
+        switch (event.key) {
+          case "ArrowLeft":
+            keys.ArrowLeft.pressed = true;
+            this.player2.lastKey = "ArrowLeft";
+            break;
+          case "ArrowRight":
+            keys.ArrowRight.pressed = true;
+            this.player2.lastKey = "ArrowRight";
+            break;
+          case "ArrowUp":
+            if (this.player2.velocity.y === 0) this.player2.velocity.y = -20;
+            break;
+          case "Enter":
+            this.player2.attack();
+            break;
+        }
       }
     });
 

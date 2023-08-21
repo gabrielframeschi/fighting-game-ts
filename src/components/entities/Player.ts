@@ -32,6 +32,7 @@ export default class Player extends Sprite {
   width = 50;
   isAttacking = false;
   health = 100;
+  dead = false;
 
   hitBox: HitBox;
   velocity: Coordinates;
@@ -85,7 +86,7 @@ export default class Player extends Sprite {
   update() {
     this.draw();
 
-    this.animateFrames();
+    if (!this.dead) this.animateFrames();
 
     this.hitBox.position.x = this.position.x + this.hitBox.offset.x;
     this.hitBox.position.y = this.position.y + this.hitBox.offset.y;
@@ -103,16 +104,28 @@ export default class Player extends Sprite {
   }
 
   attack() {
-    this.switchSprite("attack1");
     this.isAttacking = true;
+    this.switchSprite("attack1");
   }
 
   takeHit() {
-    this.switchSprite("takeHit");
     this.health -= 10;
+
+    if (this.health <= 0) {
+      this.switchSprite("death");
+      return;
+    }
+
+    this.switchSprite("takeHit");
   }
 
   switchSprite(spriteKey: string) {
+    if (this.image === this.sprites.death.image) {
+      if (this.currentFrame === this.sprites.death.framesMax - 1)
+        this.dead = true;
+      return;
+    }
+
     if (
       this.image === this.sprites.takeHit.image &&
       this.currentFrame < this.sprites.takeHit.framesMax - 1
@@ -170,6 +183,14 @@ export default class Player extends Sprite {
         if (this.image !== this.sprites.takeHit.image) {
           this.image = this.sprites.takeHit.image;
           this.framesQuant = this.sprites.takeHit.framesMax;
+          this.currentFrame = 0;
+        }
+        break;
+
+      case "death":
+        if (this.image !== this.sprites.death.image) {
+          this.image = this.sprites.death.image;
+          this.framesQuant = this.sprites.death.framesMax;
           this.currentFrame = 0;
         }
         break;
