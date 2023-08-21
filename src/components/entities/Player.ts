@@ -24,6 +24,7 @@ interface IPlayerProps extends ISpriteProps {
   lastKey: string;
   offset: Coordinates;
   sprites: Sprites;
+  hitBox: HitBox;
 }
 
 export default class Player extends Sprite {
@@ -49,6 +50,7 @@ export default class Player extends Sprite {
     scale = 1,
     offset = { x: 0, y: 0 },
     sprites,
+    hitBox,
   }: IPlayerProps) {
     super({
       imageSrc,
@@ -70,9 +72,9 @@ export default class Player extends Sprite {
         x: this.position.x,
         y: this.position.y,
       },
-      offset,
-      height: 50,
-      width: 100,
+      offset: hitBox.offset,
+      height: hitBox.height,
+      width: hitBox.width,
     };
 
     for (let sprite in this.sprites) {
@@ -103,9 +105,6 @@ export default class Player extends Sprite {
   attack() {
     this.switchSprite("attack1");
     this.isAttacking = true;
-    setTimeout(() => {
-      this.isAttacking = false;
-    }, 100);
   }
 
   switchSprite(spriteKey: string) {

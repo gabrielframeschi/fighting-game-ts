@@ -41,6 +41,12 @@ var Game = /** @class */ (function () {
                 fall: this.createSprite(2, "./assets/samuraiMack/Fall.png"),
                 attack1: this.createSprite(6, "./assets/samuraiMack/Attack1.png"),
             },
+            hitBox: {
+                position: { x: 0, y: 0 },
+                offset: { x: 100, y: 50 },
+                height: 50,
+                width: 157,
+            },
         });
         this.player2 = new Player({
             position: { x: canvas.width - 220, y: 100 },
@@ -56,6 +62,12 @@ var Game = /** @class */ (function () {
                 jump: this.createSprite(2, "./assets/kenji/Jump.png"),
                 fall: this.createSprite(2, "./assets/kenji/Fall.png"),
                 attack1: this.createSprite(4, "./assets/kenji/Attack1.png"),
+            },
+            hitBox: {
+                position: { x: 0, y: 0 },
+                offset: { x: -173, y: 50 },
+                height: 50,
+                width: 157,
             },
         });
         this.animate();
@@ -189,7 +201,7 @@ var Game = /** @class */ (function () {
         }
     };
     Game.prototype.detectCollision = function (_a) {
-        var attacker = _a.attacker, defender = _a.defender;
+        var attacker = _a.attacker, defender = _a.defender, attackFrame = _a.attackFrame;
         if (!attacker.isAttacking)
             return false;
         var collisionLeft = attacker.hitBox.position.x;
@@ -203,20 +215,33 @@ var Game = /** @class */ (function () {
         var isColliding = collisionLeft < defenderRight &&
             collisionRight > defenderLeft &&
             collisionTop < defenderBottom &&
-            collisionBottom > defenderTop;
+            collisionBottom > defenderTop &&
+            attacker.currentFrame === attackFrame;
         return isColliding;
     };
     Game.prototype.handleCollision = function () {
-        if (this.detectCollision({ attacker: this.player1, defender: this.player2 })) {
+        if (this.detectCollision({
+            attacker: this.player1,
+            defender: this.player2,
+            attackFrame: 4,
+        })) {
             this.player1.isAttacking = false;
             this.player2.health -= 10;
             decreaseHealthBar("player-2", this.player2.health);
         }
-        if (this.detectCollision({ attacker: this.player2, defender: this.player1 })) {
+        if (this.player1.isAttacking && this.player1.currentFrame === 4)
+            this.player1.isAttacking = false;
+        if (this.detectCollision({
+            attacker: this.player2,
+            defender: this.player1,
+            attackFrame: 2,
+        })) {
             this.player2.isAttacking = false;
             this.player1.health -= 10;
             decreaseHealthBar("player-1", this.player1.health);
         }
+        if (this.player2.isAttacking && this.player2.currentFrame === 2)
+            this.player2.isAttacking = false;
     };
     Game.prototype.handleVictory = function () {
         if (this.player1.health === 0 && this.player2.health === 0) {

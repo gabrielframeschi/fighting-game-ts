@@ -13,6 +13,7 @@ export const context =
 interface DettectColisionProps {
   attacker: Player;
   defender: Player;
+  attackFrame: number;
 }
 
 const keys = {
@@ -59,6 +60,12 @@ class Game {
         fall: this.createSprite(2, "./assets/samuraiMack/Fall.png"),
         attack1: this.createSprite(6, "./assets/samuraiMack/Attack1.png"),
       },
+      hitBox: {
+        position: { x: 0, y: 0 },
+        offset: { x: 100, y: 50 },
+        height: 50,
+        width: 157,
+      },
     });
 
     this.player2 = new Player({
@@ -75,6 +82,12 @@ class Game {
         jump: this.createSprite(2, "./assets/kenji/Jump.png"),
         fall: this.createSprite(2, "./assets/kenji/Fall.png"),
         attack1: this.createSprite(4, "./assets/kenji/Attack1.png"),
+      },
+      hitBox: {
+        position: { x: 0, y: 0 },
+        offset: { x: -173, y: 50 },
+        height: 50,
+        width: 157,
       },
     });
 
@@ -229,7 +242,11 @@ class Game {
     }
   }
 
-  private detectCollision({ attacker, defender }: DettectColisionProps) {
+  private detectCollision({
+    attacker,
+    defender,
+    attackFrame,
+  }: DettectColisionProps) {
     if (!attacker.isAttacking) return false;
 
     const collisionLeft = attacker.hitBox.position.x;
@@ -246,14 +263,19 @@ class Game {
       collisionLeft < defenderRight &&
       collisionRight > defenderLeft &&
       collisionTop < defenderBottom &&
-      collisionBottom > defenderTop;
+      collisionBottom > defenderTop &&
+      attacker.currentFrame === attackFrame;
 
     return isColliding;
   }
 
   private handleCollision() {
     if (
-      this.detectCollision({ attacker: this.player1, defender: this.player2 })
+      this.detectCollision({
+        attacker: this.player1,
+        defender: this.player2,
+        attackFrame: 4,
+      })
     ) {
       this.player1.isAttacking = false;
 
@@ -261,14 +283,24 @@ class Game {
       decreaseHealthBar("player-2", this.player2.health);
     }
 
+    if (this.player1.isAttacking && this.player1.currentFrame === 4)
+      this.player1.isAttacking = false;
+
     if (
-      this.detectCollision({ attacker: this.player2, defender: this.player1 })
+      this.detectCollision({
+        attacker: this.player2,
+        defender: this.player1,
+        attackFrame: 2,
+      })
     ) {
       this.player2.isAttacking = false;
 
       this.player1.health -= 10;
       decreaseHealthBar("player-1", this.player1.health);
     }
+
+    if (this.player2.isAttacking && this.player2.currentFrame === 2)
+      this.player2.isAttacking = false;
   }
 
   private handleVictory(): boolean {

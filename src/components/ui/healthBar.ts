@@ -6,5 +6,10 @@ export function decreaseHealthBar(
 
   if (!healthBar) return;
 
+  if (health < 0) {
+    healthBar.style.width = "0%";
+    return;
+  }
+
   healthBar.style.width = `${health}%`;
 }
