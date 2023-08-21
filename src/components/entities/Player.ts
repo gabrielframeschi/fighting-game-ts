@@ -80,7 +80,6 @@ export default class Player extends Sprite {
     };
 
     for (let sprite in this.sprites) {
-      sprites[sprite].image = new Image();
       sprites[sprite].image.src = sprites[sprite].imageSrc;
     }
   }
@@ -106,6 +105,7 @@ export default class Player extends Sprite {
   }
 
   attack() {
+    this.switchSprite("attack1");
     this.isAttacking = true;
     setTimeout(() => {
       this.isAttacking = false;
@@ -113,6 +113,12 @@ export default class Player extends Sprite {
   }
 
   switchSprite(spriteKey: string) {
+    if (
+      this.image === this.sprites.attack1.image &&
+      this.currentFrame < this.sprites.attack1.framesMax - 1
+    )
+      return;
+
     switch (spriteKey) {
       case "idle":
         if (this.image !== this.sprites.idle.image) {
@@ -142,6 +148,14 @@ export default class Player extends Sprite {
         if (this.image !== this.sprites.fall.image) {
           this.image = this.sprites.fall.image;
           this.framesQuant = this.sprites.fall.framesMax;
+          this.currentFrame = 0;
+        }
+        break;
+
+      case "attack1":
+        if (this.image !== this.sprites.attack1.image) {
+          this.image = this.sprites.attack1.image;
+          this.framesQuant = this.sprites.attack1.framesMax;
           this.currentFrame = 0;
         }
         break;

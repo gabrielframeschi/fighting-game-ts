@@ -47,7 +47,6 @@ var Player = /** @class */ (function (_super) {
             width: 100,
         };
         for (var sprite in _this.sprites) {
-            sprites[sprite].image = new Image();
             sprites[sprite].image.src = sprites[sprite].imageSrc;
         }
         return _this;
@@ -68,12 +67,16 @@ var Player = /** @class */ (function (_super) {
     };
     Player.prototype.attack = function () {
         var _this = this;
+        this.switchSprite("attack1");
         this.isAttacking = true;
         setTimeout(function () {
             _this.isAttacking = false;
         }, 100);
     };
     Player.prototype.switchSprite = function (spriteKey) {
+        if (this.image === this.sprites.attack1.image &&
+            this.currentFrame < this.sprites.attack1.framesMax - 1)
+            return;
         switch (spriteKey) {
             case "idle":
                 if (this.image !== this.sprites.idle.image) {
@@ -100,6 +103,13 @@ var Player = /** @class */ (function (_super) {
                 if (this.image !== this.sprites.fall.image) {
                     this.image = this.sprites.fall.image;
                     this.framesQuant = this.sprites.fall.framesMax;
+                    this.currentFrame = 0;
+                }
+                break;
+            case "attack1":
+                if (this.image !== this.sprites.attack1.image) {
+                    this.image = this.sprites.attack1.image;
+                    this.framesQuant = this.sprites.attack1.framesMax;
                     this.currentFrame = 0;
                 }
                 break;

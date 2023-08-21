@@ -36,26 +36,11 @@ var Game = /** @class */ (function () {
             framesQuant: 8,
             scale: 2.5,
             sprites: {
-                idle: {
-                    framesMax: 8,
-                    imageSrc: "./assets/samuraiMack/Idle.png",
-                    image: new Image(),
-                },
-                run: {
-                    framesMax: 8,
-                    imageSrc: "./assets/samuraiMack/Run.png",
-                    image: new Image(),
-                },
-                jump: {
-                    framesMax: 2,
-                    imageSrc: "./assets/samuraiMack/Jump.png",
-                    image: new Image(),
-                },
-                fall: {
-                    framesMax: 2,
-                    imageSrc: "./assets/samuraiMack/Fall.png",
-                    image: new Image(),
-                },
+                idle: this.createSprite(8, "./assets/samuraiMack/Idle.png"),
+                run: this.createSprite(8, "./assets/samuraiMack/Run.png"),
+                jump: this.createSprite(2, "./assets/samuraiMack/Jump.png"),
+                fall: this.createSprite(2, "./assets/samuraiMack/Fall.png"),
+                attack1: this.createSprite(6, "./assets/samuraiMack/Attack1.png"),
             },
         });
         this.player2 = new Player({
@@ -243,6 +228,13 @@ var Game = /** @class */ (function () {
             updateMatchResultLabel("Player 1 Wins!");
         if (this.player1.health < this.player2.health)
             updateMatchResultLabel("Player 2 Wins!");
+    };
+    Game.prototype.createSprite = function (framesMax, imageSrc) {
+        return {
+            framesMax: framesMax,
+            imageSrc: imageSrc,
+            image: new Image(),
+        };
     };
     return Game;
 }());
