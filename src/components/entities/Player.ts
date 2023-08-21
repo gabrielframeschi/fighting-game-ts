@@ -98,6 +98,7 @@ export default class Player extends Sprite {
 
     if (this.position.y + this.height + this.velocity.y >= canvas.height - 95) {
       this.velocity.y = 0;
+      this.position.y = 331;
       return;
     }
 
@@ -109,5 +110,45 @@ export default class Player extends Sprite {
     setTimeout(() => {
       this.isAttacking = false;
     }, 100);
+  }
+
+  switchSprite(spriteKey: string) {
+    switch (spriteKey) {
+      case "idle":
+        if (this.image !== this.sprites.idle.image) {
+          this.image = this.sprites.idle.image;
+          this.framesQuant = this.sprites.idle.framesMax;
+          this.currentFrame = 0;
+        }
+        break;
+
+      case "run":
+        if (this.image !== this.sprites.run.image) {
+          this.image = this.sprites.run.image;
+          this.framesQuant = this.sprites.run.framesMax;
+          this.currentFrame = 0;
+        }
+        break;
+
+      case "jump":
+        if (this.image !== this.sprites.jump.image) {
+          this.image = this.sprites.jump.image;
+          this.framesQuant = this.sprites.jump.framesMax;
+          this.currentFrame = 0;
+        }
+        break;
+
+      case "fall":
+        if (this.image !== this.sprites.fall.image) {
+          this.image = this.sprites.fall.image;
+          this.framesQuant = this.sprites.fall.framesMax;
+          this.currentFrame = 0;
+        }
+        break;
+
+      default:
+        this.image = this.sprites.idle.image;
+        this.framesQuant = this.sprites.idle.framesMax;
+    }
   }
 }

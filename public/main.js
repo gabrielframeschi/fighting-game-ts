@@ -46,6 +46,16 @@ var Game = /** @class */ (function () {
                     imageSrc: "./assets/samuraiMack/Run.png",
                     image: new Image(),
                 },
+                jump: {
+                    framesMax: 2,
+                    imageSrc: "./assets/samuraiMack/Jump.png",
+                    image: new Image(),
+                },
+                fall: {
+                    framesMax: 2,
+                    imageSrc: "./assets/samuraiMack/Fall.png",
+                    image: new Image(),
+                },
             },
         });
         this.player2 = new Player({
@@ -159,15 +169,22 @@ var Game = /** @class */ (function () {
         this.player1.update();
         // this.player2.update();
         this.player1.velocity.x = 0;
-        this.player1.image = this.player1.sprites.idle.image;
         this.player2.velocity.x = 0;
         if (keys.a.pressed && this.player1.lastKey === "a") {
             this.player1.velocity.x = -5;
-            this.player1.image = this.player1.sprites.run.image;
+            this.player1.switchSprite("run");
         }
         if (keys.d.pressed && this.player1.lastKey === "d") {
             this.player1.velocity.x = 5;
-            this.player1.image = this.player1.sprites.run.image;
+            this.player1.switchSprite("run");
+        }
+        if (!keys.a.pressed && !keys.d.pressed)
+            this.player1.switchSprite("idle");
+        if (this.player1.velocity.y < 0) {
+            this.player1.switchSprite("jump");
+        }
+        if (this.player1.velocity.y > 0) {
+            this.player1.switchSprite("fall");
         }
         if (keys.ArrowLeft.pressed && this.player2.lastKey === "ArrowLeft")
             this.player2.velocity.x = -5;
